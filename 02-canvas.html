@@ -95,9 +95,30 @@ button{cursor:pointer;font-family:inherit}
 .box{position:absolute;border:2px solid var(--accent);background:oklch(58% .16 35 / .08);border-radius:2px;z-index:4;cursor:pointer;transition:border-color .2s,background .2s}
 .box--acted{border-color:var(--warn);background:oklch(55% .14 70 / .08)}
 .box--done{border-color:var(--ok);background:oklch(50% .13 145 / .08);opacity:.7}
+.box--active{box-shadow:0 0 0 1px var(--accent-soft),0 4px 14px oklch(58% .16 35 / .25);z-index:7}
 .box__label{position:absolute;top:-20px;left:-2px;font-family:var(--font-mono);font-size:9px;background:var(--accent);color:var(--surface);padding:1px 5px;border-radius:2px;white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;transition:background .2s}
 .box--acted .box__label{background:var(--warn)}
 .box--done .box__label{background:var(--ok)}
+
+/* Resize handles — shown only on active box */
+.box__handle{position:absolute;width:9px;height:9px;background:var(--surface);border:1.5px solid var(--accent);border-radius:2px;z-index:8;pointer-events:auto;box-shadow:0 1px 2px oklch(20% .02 50 / .15)}
+.box--acted .box__handle{border-color:var(--warn)}
+.box--done .box__handle{border-color:var(--ok)}
+.box__handle--nw{top:-5px;left:-5px;cursor:nwse-resize}
+.box__handle--n{top:-5px;left:50%;margin-left:-5px;cursor:ns-resize}
+.box__handle--ne{top:-5px;right:-5px;cursor:nesw-resize}
+.box__handle--e{top:50%;right:-5px;margin-top:-5px;cursor:ew-resize}
+.box__handle--se{bottom:-5px;right:-5px;cursor:nwse-resize}
+.box__handle--s{bottom:-5px;left:50%;margin-left:-5px;cursor:ns-resize}
+.box__handle--sw{bottom:-5px;left:-5px;cursor:nesw-resize}
+.box__handle--w{top:50%;left:-5px;margin-top:-5px;cursor:ew-resize}
+
+/* Drawing preview (during drag-to-draw) */
+.box--preview{border-style:dashed;background:oklch(58% .16 35 / .14);pointer-events:none;z-index:9;cursor:crosshair}
+
+/* Cursor when Box tool is active */
+.snap__art--draw{cursor:crosshair}
+.snap__art--draw .pin,.snap__art--draw .box{cursor:pointer}
 
 /* legend */
 .legend{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 14px;display:flex;gap:18px;font-size:10px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;box-shadow:0 2px 8px oklch(20% .02 50 / .05)}
@@ -674,27 +695,27 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
 
   /* ====== Annotations (Comments tab) ====== */
   const annotations = [
-    {id:1, author:'An Khánh', avc:'c3', shape:'box', pos:{top:230,left:0,width:340,height:62}, status:'open', text:'Password field needs a strength meter', time:'8 m',
+    {id:1, author:'An Khánh', avc:'c3', shape:'box', pos:{top:230,left:270,width:340,height:62}, status:'open', text:'Password field needs a strength meter', time:'8 m',
       thread:[
         {who:'An Khánh', av:'AK', avc:'c3', t:'8 m', body:'This <b>password field</b> needs a strength meter — Acme\'s spec wants <mark>visible feedback while typing</mark>.'},
         {who:'Linh', av:'L', avc:'', t:'5 m', body:'Good catch. Same component as <b>SC-007</b>? <mark>@Tâm</mark> can you confirm the rules?'},
         {who:'Tâm', av:'T', avc:'c2', t:'2 m', body:'Yes, same component. Min 12 chars, 1 number, 1 symbol — meter shows weak / okay / strong. Updating today.'}
       ]},
-    {id:2, author:'Tâm', avc:'c2', shape:'pin', pos:{top:386,left:-130}, status:'open', text:'Marketing consent checkbox is opt-out by default — needs opt-in per GDPR.', time:'22 m',
+    {id:2, author:'Tâm', avc:'c2', shape:'pin', pos:{top:386,left:309}, status:'open', text:'Marketing consent checkbox is opt-out by default — needs opt-in per GDPR.', time:'22 m',
       thread:[{who:'Tâm', av:'T', avc:'c2', t:'22 m', body:'Marketing consent checkbox is <b>opt-out</b> by default — needs to be <mark>opt-in per GDPR</mark>.'},
               {who:'Linh', av:'L', avc:'', t:'20 m', body:'Agreed. Will flip to opt-in and add a note about EU vs US default.'}]},
-    {id:3, author:'Linh', avc:'', shape:'pin', pos:{top:74,left:80}, status:'open', text:'Should the work-email validator allow personal domains too? Need a product decision.', time:'1 h',
+    {id:3, author:'Linh', avc:'', shape:'pin', pos:{top:74,left:519}, status:'open', text:'Should the work-email validator allow personal domains too? Need a product decision.', time:'1 h',
       thread:[{who:'Linh', av:'L', avc:'', t:'1 h', body:'Should the work-email validator <b>allow personal domains too</b>? Need a product decision.'}]},
-    {id:4, author:'An Khánh', avc:'c3', shape:'pin', pos:{top:148,left:-160}, status:'open', text:"What's the desktop / mobile responsive behaviour? AI doc didn't say.", time:'2 h',
+    {id:4, author:'An Khánh', avc:'c3', shape:'pin', pos:{top:148,left:279}, status:'open', text:"What's the desktop / mobile responsive behaviour? AI doc didn't say.", time:'2 h',
       thread:[{who:'An Khánh', av:'AK', avc:'c3', t:'2 h', body:'What\'s the desktop / mobile responsive behaviour? AI doc didn\'t say.'}]},
-    {id:5, author:'Tâm', avc:'c2', shape:'box', pos:{top:430,left:0,width:300,height:48}, status:'acted', text:"Add the SSO option per Acme's request. → SSO button added.", time:'3 h',
+    {id:5, author:'Tâm', avc:'c2', shape:'box', pos:{top:430,left:290,width:300,height:48}, status:'acted', text:"Add the SSO option per Acme's request. → SSO button added.", time:'3 h',
       thread:[{who:'Tâm', av:'T', avc:'c2', t:'3 h', body:'Add the SSO option per Acme\'s request.'},
               {who:'Linh', av:'L', avc:'', t:'2.5 h', body:'Added — will show in tomorrow\'s standup.'},
               {who:'Tâm', av:'T', avc:'c2', t:'30 m', body:'SSO button added to design. <b>Awaiting confirm from An Khánh.</b>'}]},
-    {id:6, author:'Linh', avc:'', shape:'pin', pos:{top:104,left:-220}, status:'acted', text:'Brand mark too small — bump 1.4×. Resized.', time:'yest.',
+    {id:6, author:'Linh', avc:'', shape:'pin', pos:{top:104,left:219}, status:'acted', text:'Brand mark too small — bump 1.4×. Resized.', time:'yest.',
       thread:[{who:'Linh', av:'L', avc:'', t:'yest.', body:'Brand mark too small — bump 1.4×.'},
               {who:'Tâm', av:'T', avc:'c2', t:'5 h', body:'Resized in design; awaiting confirm.'}]},
-    {id:7, author:'Tâm', avc:'c2', shape:'pin', pos:{top:540,left:100}, status:'done', text:'Bg color too pink — use surface var. Closed.', time:'2 d',
+    {id:7, author:'Tâm', avc:'c2', shape:'pin', pos:{top:540,left:539}, status:'done', text:'Bg color too pink — use surface var. Closed.', time:'2 d',
       thread:[{who:'Tâm', av:'T', avc:'c2', t:'2 d', body:'Bg color too pink — use <code>var(--surface)</code>.'},
               {who:'Linh', av:'L', avc:'', t:'2 d', body:'Done.'}]}
   ];
@@ -742,6 +763,7 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
     $('#tab-c-count').textContent = annotations.length;
   }
 
+  const HANDLES = ['nw','n','ne','e','se','s','sw','w'];
   function renderMarks(){
     const marks = $('#marks');
     marks.innerHTML = '';
@@ -749,13 +771,17 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
       let el;
       if(a.shape === 'box'){
         el = document.createElement('div');
-        el.className = 'box' + (a.status==='acted'?' box--acted':(a.status==='done'?' box--done':''));
-        el.style.cssText = `top:${a.pos.top}px;left:50%;width:${a.pos.width}px;height:${a.pos.height}px;transform:translateX(-50%)`;
-        el.innerHTML = `<div class="box__label">▢ #${a.id} ${a.author}${a.id===active?' — active':''}</div>`;
+        el.className = 'box' + (a.status==='acted'?' box--acted':(a.status==='done'?' box--done':'')) + (a.id===active?' box--active':'');
+        el.style.cssText = `top:${a.pos.top}px;left:${a.pos.left}px;width:${a.pos.width}px;height:${a.pos.height}px`;
+        let html = `<div class="box__label">▢ #${a.id} ${a.author}${a.id===active?' — active':''}</div>`;
+        if(a.id === active){
+          html += HANDLES.map(h=>`<div class="box__handle box__handle--${h}" data-handle="${h}"></div>`).join('');
+        }
+        el.innerHTML = html;
       } else {
         el = document.createElement('div');
         el.className = 'pin' + (a.status==='acted'?' pin--acted':(a.status==='done'?' pin--done':'')) + (a.id===active?' pin--active':'');
-        el.style.cssText = `top:${a.pos.top}px;left:50%;margin-left:${a.pos.left}px`;
+        el.style.cssText = `top:${a.pos.top}px;left:${a.pos.left}px`;
         el.textContent = a.id;
       }
       el.dataset.id = a.id;
@@ -888,34 +914,154 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
     }
   });
 
-  /* Tools */
-  $$('.tool-btn').forEach(b=>{
+  /* Tools (only annotation tools — exclude Re-run AI button) */
+  function setTool(tool){
+    $$('.tool-btn[data-tool]').forEach(x=>x.classList.toggle('tool-btn--on', x.dataset.tool === tool));
+    $('#snap-art').classList.toggle('snap__art--draw', tool === 'box');
+  }
+  $$('.tool-btn[data-tool]').forEach(b=>{
     b.addEventListener('click', ()=>{
-      $$('.tool-btn').forEach(x=>x.classList.remove('tool-btn--on'));
-      b.classList.add('tool-btn--on');
-      toast(`Tool: <b>${b.dataset.tool==='pin'?'● Pin':'▢ Box'}</b> — click on the snapshot to drop.`);
+      setTool(b.dataset.tool);
+      const hint = b.dataset.tool === 'pin' ? 'click to drop' : 'drag to draw';
+      toast(`Tool: <b>${b.dataset.tool==='pin'?'● Pin':'▢ Box'}</b> — ${hint} on the snapshot.`);
     });
   });
 
-  /* Drop new annotation on snapshot click */
+  /* Pin tool — click to drop (unchanged) */
   $('#snap-art').addEventListener('click', e=>{
     if(e.target.closest('[data-id]')) return;
     if(e.target.closest('#marks')) return;
-    const tool = document.querySelector('.tool-btn--on').dataset.tool;
+    const tool = document.querySelector('.tool-btn[data-tool].tool-btn--on')?.dataset.tool;
+    if(tool !== 'pin') return; // Box uses drag-to-draw via mousedown
     const rect = $('#snap-art').getBoundingClientRect();
-    const top = Math.round(e.clientY - rect.top);
-    const left = Math.round(e.clientX - rect.left - rect.width/2);
-    const id = Math.max(...annotations.map(a=>a.id)) + 1;
+    const top = e.clientY - rect.top;
+    const left = e.clientX - rect.left;
+    const id = (annotations.length ? Math.max(...annotations.map(a=>a.id)) : 0) + 1;
     annotations.push({
-      id, author:'Linh', avc:'', shape:tool, status:'open',
-      pos: tool==='box' ? {top, left:left-100, width:200, height:48} : {top, left},
+      id, author:'Linh', avc:'', shape:'pin', status:'open',
+      pos:{top, left},
       text:'New annotation — add a comment in the thread.', time:'just now',
       thread:[{who:'Linh', av:'L', avc:'', t:'just now', body:'<i>New annotation — type a comment below.</i>'}]
     });
     activateTab('comments');
     setActive(id, true);
-    toast(`#${id} added. <b>Chưa xử lý.</b>`);
+    toast(`#${id} added (Pin). <b>Chưa xử lý.</b>`);
     $('#reply-box').focus();
+  });
+
+  /* Box tool — drag to draw, drag handles to resize */
+  let dragState = null;
+  let drawPreview = null;
+  const MIN_BOX = 20;
+
+  $('#snap-art').addEventListener('mousedown', e=>{
+    const snap = $('#snap-art');
+    const rect = snap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    /* Resize handle? */
+    const handle = e.target.closest('.box__handle');
+    if(handle){
+      e.preventDefault();
+      e.stopPropagation();
+      const boxEl = handle.closest('.box');
+      const id = parseInt(boxEl.dataset.id, 10);
+      const a = annotations.find(x=>x.id===id);
+      if(!a) return;
+      dragState = {
+        mode:'resizing', id,
+        handle:handle.dataset.handle,
+        startX:x, startY:y,
+        orig:{top:a.pos.top, left:a.pos.left, width:a.pos.width, height:a.pos.height}
+      };
+      return;
+    }
+
+    /* Existing pin/box clicked → let click handler activate it */
+    if(e.target.closest('.pin, .box')) return;
+
+    /* Empty area + Box tool → start drawing */
+    const tool = document.querySelector('.tool-btn[data-tool].tool-btn--on')?.dataset.tool;
+    if(tool !== 'box') return;
+
+    e.preventDefault();
+    dragState = { mode:'drawing', startX:x, startY:y, curX:x, curY:y };
+    drawPreview = document.createElement('div');
+    drawPreview.className = 'box box--preview';
+    drawPreview.style.cssText = `top:${y}px;left:${x}px;width:0;height:0`;
+    snap.appendChild(drawPreview);
+  });
+
+  document.addEventListener('mousemove', e=>{
+    if(!dragState) return;
+    const rect = $('#snap-art').getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if(dragState.mode === 'drawing'){
+      dragState.curX = x;
+      dragState.curY = y;
+      const left = Math.min(dragState.startX, x);
+      const top = Math.min(dragState.startY, y);
+      const width = Math.abs(x - dragState.startX);
+      const height = Math.abs(y - dragState.startY);
+      drawPreview.style.cssText = `top:${top}px;left:${left}px;width:${width}px;height:${height}px`;
+    } else if(dragState.mode === 'resizing'){
+      const a = annotations.find(x=>x.id===dragState.id);
+      if(!a) return;
+      const dx = x - dragState.startX;
+      const dy = y - dragState.startY;
+      const h = dragState.handle;
+      const o = dragState.orig;
+
+      let nTop = o.top, nLeft = o.left, nW = o.width, nH = o.height;
+      if(h.includes('n')){ nTop = o.top + dy; nH = o.height - dy; }
+      if(h.includes('s')){ nH = o.height + dy; }
+      if(h.includes('w')){ nLeft = o.left + dx; nW = o.width - dx; }
+      if(h.includes('e')){ nW = o.width + dx; }
+
+      /* Clamp min size — pin the opposite edge */
+      if(nW < MIN_BOX){
+        if(h.includes('w')) nLeft = o.left + o.width - MIN_BOX;
+        nW = MIN_BOX;
+      }
+      if(nH < MIN_BOX){
+        if(h.includes('n')) nTop = o.top + o.height - MIN_BOX;
+        nH = MIN_BOX;
+      }
+
+      a.pos.top = nTop; a.pos.left = nLeft;
+      a.pos.width = nW; a.pos.height = nH;
+      renderMarks();
+    }
+  });
+
+  document.addEventListener('mouseup', e=>{
+    if(!dragState) return;
+    const finishing = dragState;
+    dragState = null;
+
+    if(finishing.mode === 'drawing'){
+      if(drawPreview){ drawPreview.remove(); drawPreview = null; }
+      const left = Math.min(finishing.startX, finishing.curX);
+      const top = Math.min(finishing.startY, finishing.curY);
+      const width = Math.abs(finishing.curX - finishing.startX);
+      const height = Math.abs(finishing.curY - finishing.startY);
+      if(width >= MIN_BOX && height >= MIN_BOX){
+        const id = (annotations.length ? Math.max(...annotations.map(a=>a.id)) : 0) + 1;
+        annotations.push({
+          id, author:'Linh', avc:'', shape:'box', status:'open',
+          pos:{top, left, width, height},
+          text:'New annotation — add a comment in the thread.', time:'just now',
+          thread:[{who:'Linh', av:'L', avc:'', t:'just now', body:'<i>New annotation — type a comment below.</i>'}]
+        });
+        activateTab('comments');
+        setActive(id, true);
+        toast(`#${id} added (Box, ${Math.round(width)}×${Math.round(height)}). <b>Chưa xử lý.</b>`);
+        $('#reply-box').focus();
+      }
+    }
   });
 
   /* ====== Tabs ====== */

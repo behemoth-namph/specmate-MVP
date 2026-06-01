@@ -224,9 +224,10 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
         <small class="field__hint"><b id="url-count">3</b> URLs detected. Capture runs asynchronously — Screens appear as <b>pending</b> and flip to <b>drafted</b> when the AI returns.</small>
       </div>
       <div class="add__cta-row">
-        <button class="btn btn--primary btn--lg" id="capture-btn">Capture &amp; draft →</button>
+        <button class="btn btn--primary btn--lg" id="capture-btn" title="Capture URL into Snapshot + run AI to draft SRS">Capture &amp; draft →</button>
+        <button class="btn btn--lg" id="capture-only-btn" title="Capture URL into Snapshot only — no AI; author SRS manually later (FR-1 only)">Capture only →</button>
         <button class="btn btn--ghost btn--sm" id="clear-btn">Clear</button>
-        <span class="add__cta-meta">⏎ to submit · esc to clear</span>
+        <span class="add__cta-meta">⏎ to draft · esc to clear</span>
       </div>
     </div>
 
@@ -479,42 +480,65 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
   });
 
   $('#capture-cancel').addEventListener('click', ()=>{
+    const urls = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
     modal.classList.remove('on');
-    toast('Capture running in background. <b>3 new Screens</b> added: SC-011, SC-012, SC-013.', 4000);
-    appendNewScreens();
+    appendNewScreens(urls, true);
+    toast(`Capture running in background. <b>${urls.length} new Screens</b> added.`, 4000);
   });
 
   $('#capture-done').addEventListener('click', ()=>{
+    const urls = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
     modal.classList.remove('on');
-    appendNewScreens();
-    toast('<b>3 new Screens</b> added: SC-011, SC-012, SC-013. AI drafts running. <a class="toast__act" onclick="document.querySelector(\'tr[data-num=SC-011]\')?.scrollIntoView({behavior:\'smooth\',block:\'center\'});return false">Jump to →</a>');
+    appendNewScreens(urls, true);
+    toast(`<b>${urls.length} new Screens</b> added. AI drafts running.`);
     ta.value = '';
     updateCount();
   });
 
-  let appended = false;
-  function appendNewScreens(){
-    if(appended) return; appended = true;
-    const rows = [
-      {num:'SC-011', name:'Orders', url:'wires.behemoth.local/acme/orders'},
-      {num:'SC-012', name:'Order detail', url:'wires.behemoth.local/acme/orders/detail'},
-      {num:'SC-013', name:'Order refund', url:'wires.behemoth.local/acme/orders/refund'}
-    ];
-    rows.forEach(r=>{
+  /* Capture only — no AI generate (FR-1 only) */
+  $('#capture-only-btn').addEventListener('click', ()=>{
+    const urls = updateCount();
+    if(urls.length === 0){ toast('No URLs to capture. Paste at least one URL.'); return; }
+    if(urls.length > 20){ toast('Max 20 URLs per submission.'); return; }
+    appendNewScreens(urls, false);
+    toast(`<b>${urls.length} new Screens</b> added (no AI). Author SRS manually or run AI later from the canvas.`, 4000);
+    ta.value = '';
+    updateCount();
+  });
+
+  let nextNum = 11;
+  function appendNewScreens(urls, withAI){
+    urls.forEach(url=>{
+      const num = 'SC-' + String(nextNum++).padStart(3,'0');
+      const name = deriveName(url);
       const tr = document.createElement('tr');
       tr.className = 'new-row';
-      tr.dataset.status = 'pending';
-      tr.dataset.target = '02-canvas.html';
-      tr.dataset.num = r.num;
-      tr.innerHTML = `<td class="num">${r.num}</td>
-        <td><div class="name">${r.name}<small>${r.url}</small></div></td>
-        <td><span class="pill pill--draft pill--dot">Pending · drafting…</span></td>
+      tr.dataset.status = withAI ? 'pending' : 'drafted';
+      tr.dataset.target = withAI ? '02-canvas.html' : '02-canvas.html#srs';
+      tr.dataset.num = num;
+      const aiPill = withAI
+        ? '<span class="pill pill--draft pill--dot">Pending · drafting…</span>'
+        : '<span class="pill pill--warn pill--dot">Empty · no AI</span>';
+      const action = withAI
+        ? '<span class="row-action muted">—</span>'
+        : '<span class="row-action">Author →</span>';
+      tr.innerHTML = `<td class="num">${num}</td>
+        <td><div class="name">${name}<small>${url}</small></div></td>
+        <td>${aiPill}</td>
         <td class="pin-cell pin-cell--zero">—</td>
         <td class="time">just now</td>
-        <td><span class="row-action muted">—</span></td>`;
+        <td>${action}</td>`;
       tbody.insertBefore(tr, tbody.firstChild);
     });
-    $('#head-meta').textContent = '13 Screens · 5 pending · 6 drafted · 2 reviewed · last activity just now';
+    const total = document.querySelectorAll('#screens-tbody tr').length;
+    $('#head-meta').textContent = `${total} Screens · last activity just now`;
+  }
+
+  function deriveName(url){
+    const m = url.replace(/[?#].*$/,'').match(/\/([^\/]+)\/?$/);
+    if(!m) return 'New screen';
+    const s = m[1].replace(/[-_]/g,' ');
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   /* Keyboard */
