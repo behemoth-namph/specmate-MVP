@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=1640">
-<title>SpecMate v1 · 02 · Canvas — SRS</title>
+<title>SpecMate v1 · 02 · Canvas</title>
 <style>
 :root{
   --bg:oklch(97% .012 80);
@@ -249,7 +249,7 @@ button{cursor:pointer;font-family:inherit}
 .com__reply-bar{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:10.5px;color:var(--subtle);font-family:var(--font-mono)}
 .com__reply-bar .btn-mini{margin-left:auto}
 
-/* ===== MARKDOWN doc panels (SRS / Database) ===== */
+/* ===== MARKDOWN doc panel (Spec) ===== */
 .md-bar{padding:10px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--hairline);background:var(--surface);font-size:11px;color:var(--muted);flex-wrap:wrap}
 .md-bar b{color:var(--fg);font-weight:500}
 .md-bar__spacer{flex:1}
@@ -349,8 +349,6 @@ button{cursor:pointer;font-family:inherit}
       <div class="canvas__spacer"></div>
       <div class="canvas__url" id="canvas-url">wires.behemoth.local/acme/sign-up</div>
       <div class="canvas__tools">
-        <button class="tool-btn tool-btn--accent" id="rerun-canvas-btn" title="Re-run AI on this Screen (FR-5)">↻ Re-run AI</button>
-        <span class="canvas__tools-sep"></span>
         <button class="tool-btn tool-btn--on" data-tool="pin">● Pin</button>
         <button class="tool-btn" data-tool="box">▢ Box</button>
       </div>
@@ -381,8 +379,7 @@ button{cursor:pointer;font-family:inherit}
   <aside class="side">
     <div class="side__tabs" id="side-tabs">
       <button class="side__tab" data-tab="comments">Comments <b id="tab-c-count">7</b></button>
-      <button class="side__tab side__tab--on" data-tab="srs">SRS <b>462w</b></button>
-      <button class="side__tab" data-tab="db">Database <b>3 tbl</b></button>
+      <button class="side__tab side__tab--on" data-tab="spec">Spec <b>462w</b></button>
     </div>
 
     <!-- ===== COMMENTS panel ===== -->
@@ -454,31 +451,29 @@ button{cursor:pointer;font-family:inherit}
       </div>
     </div>
 
-    <!-- ===== SRS panel ===== -->
-    <div class="side__panel side__panel--on" data-panel="srs">
-      <div class="md-bar" id="bar-srs">
+    <!-- ===== SPEC panel (manual markdown, no AI) ===== -->
+    <div class="side__panel side__panel--on" data-panel="spec">
+      <div class="md-bar" id="bar-spec">
         <div class="md-bar__view-row">
-          <span class="md-status md-status--pending" id="srs-status">AI drafted · pending review</span>
-          <span><b>462</b> words</span>
+          <span><b>462</b> words · last edit <b>Linh</b>, 2 h ago</span>
           <span class="md-bar__spacer"></span>
-          <button class="btn-mini" data-md-edit="srs">✎ Edit</button>
-          <button class="btn-mini btn-mini--approve" data-md-review="srs">✓ Mark reviewed</button>
+          <button class="btn-mini" data-md-edit="spec">✎ Edit</button>
         </div>
         <div class="md-bar__edit-row">
-          <span style="color:var(--accent);font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600">Editing SRS · markdown source</span>
+          <span style="color:var(--accent);font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600">Editing Spec · markdown source</span>
           <span class="md-bar__spacer"></span>
-          <button class="btn-mini" data-md-cancel="srs">Cancel</button>
-          <button class="btn-mini btn-mini--approve" data-md-save="srs">Save</button>
+          <button class="btn-mini" data-md-cancel="spec">Cancel</button>
+          <button class="btn-mini btn-mini--approve" data-md-save="spec">Save</button>
         </div>
       </div>
-      <div class="md-wrap md-view" data-view="srs">
+      <div class="md-wrap md-view" data-view="spec">
         <div class="side-note">
-          <span class="side-note__kicker">Editor's note · FR-3 / FR-4 / FR-5</span>
-          AI drafted this SRS from the Document Skeleton against the wireframe Snapshot. <b>Edit freely as markdown</b>, mark the doc reviewed when satisfied, or re-run the AI to redraw from scratch (your edits are kept in history).
+          <span class="side-note__kicker">Editor's note</span>
+          Type your Spec for this Screen as <b>markdown</b> — headings, lists, code, tables, blockquote all render. v1 không có AI auto-generate; Spec là vùng để tự tay note requirements + behaviour + edge cases.
         </div>
         <article class="md-doc">
-          <h1>Sign-up — SRS</h1>
-          <p class="md-doc__source">For SC-002 · Sign-up · AI drafted 18 m ago · skeleton: Starter · 5 sections</p>
+          <h1>Sign-up — Spec</h1>
+          <p class="md-doc__source">For SC-002 · Sign-up · <b>Linh</b> · 2 h ago</p>
 
           <h2>Overview</h2>
           <p>The Sign-up screen lets a new Acme team-member <b>create an account and a Workspace in one step</b>. It is the entry point for self-service onboarding; users arrive from a marketing CTA or a teammate's invite link.</p>
@@ -507,13 +502,13 @@ button{cursor:pointer;font-family:inherit}
             <li>Goes to: <b>SC-008 Onboarding · welcome</b> on success, <b>SC-001 Sign-in</b> via secondary link.</li>
           </ul>
 
-          <blockquote>Annotations #1 (password strength meter) and #3 (work-email validator) are open product questions tied to this screen — see Comments tab.</blockquote>
+          <blockquote>Annotations #1 (password strength meter) and #3 (work-email validator) are open product questions tied to this Screen — see Comments tab.</blockquote>
         </article>
       </div>
-      <div class="md-editor" data-editor="srs">
-        <textarea spellcheck="false"># Sign-up — SRS
+      <div class="md-editor" data-editor="spec">
+        <textarea spellcheck="false"># Sign-up — Spec
 
-_For SC-002 · Sign-up · AI drafted 18 m ago · skeleton: Starter · 5 sections_
+_For SC-002 · Sign-up · Linh · 2 h ago_
 
 ## Overview
 The Sign-up screen lets a new Acme team-member **create an account and a Workspace in one step**. It is the entry point for self-service onboarding; users arrive from a marketing CTA or a teammate's invite link.
@@ -536,154 +531,13 @@ The Acme brand mark, a welcome line, and a single Sign-up form. The form takes *
 - Comes from: marketing landing (out-of-app), Sign-in's "Create an Acme account" CTA.
 - Goes to: **SC-008 Onboarding · welcome** on success, **SC-001 Sign-in** via secondary link.
 
-> Annotations #1 (password strength meter) and #3 (work-email validator) are open product questions tied to this screen — see Comments tab.
-</textarea>
-      </div>
-    </div>
-
-    <!-- ===== DATABASE panel ===== -->
-    <div class="side__panel" data-panel="db">
-      <div class="md-bar" id="bar-db">
-        <div class="md-bar__view-row">
-          <span class="md-status md-status--reviewed" id="db-status">Reviewed</span>
-          <span><b>3 tables</b> · 184 words</span>
-          <span class="md-bar__spacer"></span>
-          <button class="btn-mini" data-md-edit="db">✎ Edit</button>
-          <button class="btn-mini btn-mini--approve" data-md-review="db">✓ Mark reviewed</button>
-        </div>
-        <div class="md-bar__edit-row">
-          <span style="color:var(--accent);font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600">Editing Database · markdown source</span>
-          <span class="md-bar__spacer"></span>
-          <button class="btn-mini" data-md-cancel="db">Cancel</button>
-          <button class="btn-mini btn-mini--approve" data-md-save="db">Save</button>
-        </div>
-      </div>
-      <div class="md-wrap md-view" data-view="db">
-        <div class="side-note">
-          <span class="side-note__kicker">Editor's note · FR-6 (Database)</span>
-          Manually-authored markdown for the database touch on this Screen — tables read/written, indexes, notes. v1 does <b>not</b> AI-generate this content (deferred). Use the same Edit toggle as SRS.
-        </div>
-        <article class="md-doc">
-          <h1>Sign-up — Database touch</h1>
-          <p class="md-doc__source">For SC-002 · Sign-up · <b>Tâm</b> · 1 day ago</p>
-
-          <h2>Tables written</h2>
-          <p>The Sign-up flow writes to <code>users</code>, <code>workspaces</code>, and <code>workspace_members</code> in a single transaction. The first user is always inserted as the workspace owner.</p>
-
-          <h3>users</h3>
-          <table class="db">
-            <tr><th>column</th><th>type</th><th>notes</th></tr>
-            <tr><td><b>id</b></td><td>uuid</td><td>pk</td></tr>
-            <tr><td>email</td><td>text</td><td>unique, lowered, indexed</td></tr>
-            <tr><td>password_hash</td><td>text</td><td>bcrypt cost 12</td></tr>
-            <tr><td>marketing_opt_in</td><td>bool</td><td>default <code>false</code> (GDPR)</td></tr>
-            <tr><td>created_at</td><td>timestamp</td><td></td></tr>
-          </table>
-
-          <h3>workspaces</h3>
-          <table class="db">
-            <tr><th>column</th><th>type</th><th>notes</th></tr>
-            <tr><td><b>id</b></td><td>uuid</td><td>pk</td></tr>
-            <tr><td>slug</td><td>text</td><td>unique, lowered, alphanumeric+dash</td></tr>
-            <tr><td>name</td><td>text</td><td>display name from form</td></tr>
-            <tr><td>owner_user_id</td><td>uuid</td><td>fk → users.id</td></tr>
-            <tr><td>created_at</td><td>timestamp</td><td></td></tr>
-          </table>
-
-          <h3>workspace_members</h3>
-          <table class="db">
-            <tr><th>column</th><th>type</th><th>notes</th></tr>
-            <tr><td><b>id</b></td><td>uuid</td><td>pk</td></tr>
-            <tr><td>workspace_id</td><td>uuid</td><td>fk → workspaces.id</td></tr>
-            <tr><td>user_id</td><td>uuid</td><td>fk → users.id</td></tr>
-            <tr><td>role</td><td>enum</td><td>owner / dev / client (v1: deferred)</td></tr>
-            <tr><td>joined_at</td><td>timestamp</td><td></td></tr>
-          </table>
-
-          <h2>Indexes</h2>
-          <ul>
-            <li><code>users.email</code> — unique, btree</li>
-            <li><code>workspaces.slug</code> — unique, btree</li>
-            <li><code>workspace_members.workspace_id, user_id</code> — composite unique</li>
-          </ul>
-
-          <h2>Notes</h2>
-          <ul>
-            <li>All three inserts run in a single <code>BEGIN…COMMIT</code> — partial state is impossible.</li>
-            <li>If the email is already taken, the entire transaction rolls back and the form shows an inline error (no race window).</li>
-            <li>Workspace slug collision is handled by appending a numeric suffix server-side before re-attempting the insert (max 5 retries).</li>
-          </ul>
-        </article>
-      </div>
-      <div class="md-editor" data-editor="db">
-        <textarea spellcheck="false"># Sign-up — Database touch
-
-_For SC-002 · Sign-up · Tâm · 1 day ago_
-
-## Tables written
-The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a single transaction. The first user is always inserted as the workspace owner.
-
-### users
-| column | type | notes |
-|---|---|---|
-| **id** | uuid | pk |
-| email | text | unique, lowered, indexed |
-| password_hash | text | bcrypt cost 12 |
-| marketing_opt_in | bool | default `false` (GDPR) |
-| created_at | timestamp | |
-
-### workspaces
-| column | type | notes |
-|---|---|---|
-| **id** | uuid | pk |
-| slug | text | unique, lowered, alphanumeric+dash |
-| name | text | display name from form |
-| owner_user_id | uuid | fk → users.id |
-| created_at | timestamp | |
-
-### workspace_members
-| column | type | notes |
-|---|---|---|
-| **id** | uuid | pk |
-| workspace_id | uuid | fk → workspaces.id |
-| user_id | uuid | fk → users.id |
-| role | enum | owner / dev / client (v1: deferred) |
-| joined_at | timestamp | |
-
-## Indexes
-- `users.email` — unique, btree
-- `workspaces.slug` — unique, btree
-- `workspace_members.workspace_id, user_id` — composite unique
-
-## Notes
-- All three inserts run in a single `BEGIN…COMMIT` — partial state is impossible.
-- If the email is already taken, the entire transaction rolls back and the form shows an inline error (no race window).
-- Workspace slug collision is handled by appending a numeric suffix server-side before re-attempting the insert (max 5 retries).
+> Annotations #1 (password strength meter) and #3 (work-email validator) are open product questions tied to this Screen — see Comments tab.
 </textarea>
       </div>
     </div>
 
   </aside>
 
-</div>
-
-<!-- RE-RUN AI modal -->
-<div class="modal-wrap" id="rerun-modal">
-  <div class="modal">
-    <div class="modal__head">
-      <span class="modal__kicker">FR-5 · Re-run AI</span>
-      <h3 class="modal__title">Re-draw the SRS from scratch?</h3>
-    </div>
-    <div class="modal__body">
-      <p>SpecMate will run a fresh Vision Pass against this Screen's Snapshot using the current Document Skeleton (<b>Starter · 5 sections</b>).</p>
-      <p>The current SRS will be <b>saved to history</b> and replaced with the new AI draft. You can roll back from the history menu.</p>
-      <p style="font-family:var(--font-mono);font-size:11px;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;margin-top:14px">Cost · ~$0.003 · gpt-5-nano</p>
-    </div>
-    <div class="modal__foot">
-      <button class="btn btn--ghost" data-modal-close>Cancel</button>
-      <button class="btn btn--primary" id="rerun-go">Re-run →</button>
-    </div>
-  </div>
 </div>
 
 <div class="toast-wrap" id="toast-wrap"></div>
@@ -706,8 +560,8 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
               {who:'Linh', av:'L', avc:'', t:'20 m', body:'Agreed. Will flip to opt-in and add a note about EU vs US default.'}]},
     {id:3, author:'Linh', avc:'', shape:'pin', pos:{top:74,left:519}, status:'open', text:'Should the work-email validator allow personal domains too? Need a product decision.', time:'1 h',
       thread:[{who:'Linh', av:'L', avc:'', t:'1 h', body:'Should the work-email validator <b>allow personal domains too</b>? Need a product decision.'}]},
-    {id:4, author:'An Khánh', avc:'c3', shape:'pin', pos:{top:148,left:279}, status:'open', text:"What's the desktop / mobile responsive behaviour? AI doc didn't say.", time:'2 h',
-      thread:[{who:'An Khánh', av:'AK', avc:'c3', t:'2 h', body:'What\'s the desktop / mobile responsive behaviour? AI doc didn\'t say.'}]},
+    {id:4, author:'An Khánh', avc:'c3', shape:'pin', pos:{top:148,left:279}, status:'open', text:"What's the desktop / mobile responsive behaviour? Spec doesn't cover this.", time:'2 h',
+      thread:[{who:'An Khánh', av:'AK', avc:'c3', t:'2 h', body:'What\'s the desktop / mobile responsive behaviour? <b>Spec doesn\'t cover this.</b>'}]},
     {id:5, author:'Tâm', avc:'c2', shape:'box', pos:{top:430,left:290,width:300,height:48}, status:'acted', text:"Add the SSO option per Acme's request. → SSO button added.", time:'3 h',
       thread:[{who:'Tâm', av:'T', avc:'c2', t:'3 h', body:'Add the SSO option per Acme\'s request.'},
               {who:'Linh', av:'L', avc:'', t:'2.5 h', body:'Added — will show in tomorrow\'s standup.'},
@@ -914,7 +768,7 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
     }
   });
 
-  /* Tools (only annotation tools — exclude Re-run AI button) */
+  /* Tools (annotation tools — Pin / Box) */
   function setTool(tool){
     $$('.tool-btn[data-tool]').forEach(x=>x.classList.toggle('tool-btn--on', x.dataset.tool === tool));
     $('#snap-art').classList.toggle('snap__art--draw', tool === 'box');
@@ -1074,8 +928,9 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
     activateTab(btn.dataset.tab);
   });
   function activateTabFromHash(){
-    const h = (window.location.hash || '').replace('#','');
-    if(h === 'comments' || h === 'srs' || h === 'db') activateTab(h);
+    let h = (window.location.hash || '').replace('#','');
+    if(h === 'srs') h = 'spec'; // back-compat after rename
+    if(h === 'comments' || h === 'spec') activateTab(h);
   }
   window.addEventListener('hashchange', activateTabFromHash);
 
@@ -1088,7 +943,7 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
       document.querySelector(`.md-view[data-view="${kind}"]`).classList.add('md-view--off');
       document.querySelector(`.md-editor[data-editor="${kind}"]`).classList.add('md-editor--on');
       document.querySelector(`.md-editor[data-editor="${kind}"] textarea`).focus();
-      toast(`Editing <b>${kind==='srs'?'SRS':'Database'}</b> markdown.`);
+      toast(`Editing <b>Spec</b> markdown.`);
       return;
     }
     const cancelBtn = e.target.closest('[data-md-cancel]');
@@ -1105,44 +960,9 @@ The Sign-up flow writes to `users`, `workspaces`, and `workspace_members` in a s
       document.getElementById('bar-'+kind).classList.remove('md-bar--editing');
       document.querySelector(`.md-view[data-view="${kind}"]`).classList.remove('md-view--off');
       document.querySelector(`.md-editor[data-editor="${kind}"]`).classList.remove('md-editor--on');
-      const status = document.getElementById(kind+'-status');
-      if(status){
-        status.className = 'md-status md-status--draft';
-        status.textContent = 'Edited · pending review';
-      }
-      toast(`Saved <b>${kind==='srs'?'SRS':'Database'}</b> · last edit Linh, just now.`);
+      toast(`Saved Spec · last edit Linh, just now.`);
       return;
     }
-    const reviewBtn = e.target.closest('[data-md-review]');
-    if(reviewBtn){
-      const kind = reviewBtn.dataset.mdReview;
-      const status = document.getElementById(kind+'-status');
-      status.className = 'md-status md-status--reviewed';
-      status.textContent = 'Reviewed';
-      toast(`Marked <b>${kind==='srs'?'SRS':'Database'} reviewed</b> by Linh, just now.`);
-      return;
-    }
-    const rerunBtn = e.target.closest('[data-md-rerun],#rerun-canvas-btn');
-    if(rerunBtn){
-      $('#rerun-modal').classList.add('on');
-      return;
-    }
-    const closeBtn = e.target.closest('[data-modal-close]');
-    if(closeBtn){
-      $$('.modal-wrap.on').forEach(m=>m.classList.remove('on'));
-      return;
-    }
-  });
-
-  $('#rerun-go').addEventListener('click', ()=>{
-    $('#rerun-modal').classList.remove('on');
-    toast('Re-running AI on SRS… <b>~3 s</b>');
-    setTimeout(()=>{
-      const status = document.getElementById('srs-status');
-      status.className = 'md-status md-status--pending';
-      status.textContent = 'AI drafted · pending review';
-      toast('SRS re-drafted. Prior version saved to history.', 3500);
-    }, 2200);
   });
 
   /* Zoom */

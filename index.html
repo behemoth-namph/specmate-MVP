@@ -185,7 +185,7 @@ button{cursor:pointer;font-family:inherit}
   <div class="appbar__build">v1 · internal preview</div>
   <div class="appbar__nav">
     <a href="01-screens-list.html" class="on">Screens</a>
-    <a href="#" onclick="alert('Settings: Document Skeleton (read-only in v1 — operator config)');return false">Settings</a>
+    <a href="#" onclick="alert('Settings: minimal in v1 — operator config only');return false">Settings</a>
   </div>
   <div class="appbar__spacer"></div>
   <div class="appbar__hello">Hi, <b>Linh</b> — display name only</div>
@@ -202,9 +202,9 @@ button{cursor:pointer;font-family:inherit}
     </div>
     <dl class="page__meta">
       <dt>Issue</dt><dd>I · v1 preview</dd>
-      <dt>Skeleton</dt><dd>Starter · 5 sections</dd>
-      <dt>Model</dt><dd>gpt-5-nano</dd>
+      <dt>Scope</dt><dd>QA + manual Spec</dd>
       <dt>Network</dt><dd>internal only</dd>
+      <dt>Demo</dt><dd>2026-06-30</dd>
     </dl>
   </div>
 
@@ -212,7 +212,7 @@ button{cursor:pointer;font-family:inherit}
   <section class="add">
     <div>
       <div class="add__head">
-        <div class="kicker">Article one · FR-1</div>
+        <div class="kicker">Article one · Capture</div>
         <h2>Add Screens from URLs</h2>
         <p>Paste one publicly-reachable wireframe URL per line. Up to 20 per submission. Private or auth-gated links (including Figma share URLs) are not captured.</p>
       </div>
@@ -221,20 +221,19 @@ button{cursor:pointer;font-family:inherit}
         <textarea class="field__ta" id="urls" rows="6">https://wires.behemoth.local/acme/orders
 https://wires.behemoth.local/acme/orders/detail
 https://wires.behemoth.local/acme/orders/refund</textarea>
-        <small class="field__hint"><b id="url-count">3</b> URLs detected. Capture runs asynchronously — Screens appear as <b>pending</b> and flip to <b>drafted</b> when the AI returns.</small>
+        <small class="field__hint"><b id="url-count">3</b> URLs detected. Each URL captures into a Snapshot — Screens appear as soon as the page is fetched. Spec is written manually inside each canvas.</small>
       </div>
       <div class="add__cta-row">
-        <button class="btn btn--primary btn--lg" id="capture-btn" title="Capture URL into Snapshot + run AI to draft SRS">Capture &amp; draft →</button>
-        <button class="btn btn--lg" id="capture-only-btn" title="Capture URL into Snapshot only — no AI; author SRS manually later (FR-1 only)">Capture only →</button>
+        <button class="btn btn--primary btn--lg" id="capture-btn" title="Capture URL into Snapshot · Spec written manually after">Capture →</button>
         <button class="btn btn--ghost btn--sm" id="clear-btn">Clear</button>
-        <span class="add__cta-meta">⏎ to draft · esc to clear</span>
+        <span class="add__cta-meta">⏎ to capture · esc to clear</span>
       </div>
     </div>
 
     <aside>
       <div class="ed-note">
         <span class="ed-note__kicker">Editor's note</span>
-        The first pass is a draft, not the answer. <b>Approve, edit, or reject section by section</b> on each Screen. Re-run the AI when the skeleton changes.
+        QA-first scope. Capture URL → write Spec → annotate the design with <b>Pin / Box</b>, walk comments through <b>chưa xử lý → đã xử lý → hoàn thành</b>.
         <span class="ed-note__sig">— SM, the room</span>
       </div>
     </aside>
@@ -244,16 +243,15 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
   <section class="screens">
     <div class="screens__head">
       <div>
-        <div class="kicker">Article two · FR-2</div>
+        <div class="kicker">Article two · Screens</div>
         <h2>Screens</h2>
-        <div class="screens__head-meta" id="head-meta">10 Screens · 2 pending · 6 drafted · 2 reviewed · last activity 6 min ago</div>
+        <div class="screens__head-meta" id="head-meta">10 Screens · 4 empty · 6 drafted · last activity 6 min ago</div>
       </div>
       <div class="screens__head-actions">
         <div class="screens__filter" id="filter">
           <button class="on" data-filter="all">All</button>
-          <button data-filter="pending">Pending</button>
+          <button data-filter="empty">Empty</button>
           <button data-filter="drafted">Drafted</button>
-          <button data-filter="reviewed">Reviewed</button>
         </div>
         <button class="btn btn--sm" id="sort-btn">Sort: newest ↓</button>
       </div>
@@ -264,17 +262,17 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
         <tr>
           <th>#</th>
           <th>Name &amp; source URL</th>
-          <th>AI draft</th>
+          <th>Spec</th>
           <th>Comments</th>
           <th>Updated</th>
           <th></th>
         </tr>
       </thead>
       <tbody id="screens-tbody">
-        <tr data-status="reviewed" data-target="02-canvas.html">
+        <tr data-status="drafted" data-target="02-canvas.html">
           <td class="num">SC-001</td>
           <td><div class="name">Sign-in<small>wires.behemoth.local/acme/sign-in</small></div></td>
-          <td><span class="pill pill--ok pill--dot">Reviewed</span></td>
+          <td><span class="pill pill--ok pill--dot">Drafted</span></td>
           <td class="pin-cell"><b>2</b> open · 1 done</td>
           <td class="time">12 min ago</td>
           <td><span class="row-action">Open →</span></td>
@@ -295,18 +293,18 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
           <td class="time">21 min ago</td>
           <td><span class="row-action">Open →</span></td>
         </tr>
-        <tr data-status="pending" data-target="02-canvas.html">
+        <tr data-status="empty" data-target="02-canvas.html">
           <td class="num">SC-004</td>
           <td><div class="name">Settings<small>wires.behemoth.local/acme/settings</small></div></td>
-          <td><span class="pill pill--draft pill--dot">Pending · drafting…</span></td>
+          <td><span class="pill pill--warn pill--dot">Empty</span></td>
           <td class="pin-cell pin-cell--zero">—</td>
           <td class="time">just now</td>
           <td><span class="row-action muted">—</span></td>
         </tr>
-        <tr data-status="pending" data-target="02-canvas.html">
+        <tr data-status="empty" data-target="02-canvas.html">
           <td class="num">SC-005</td>
           <td><div class="name">Billing<small>wires.behemoth.local/acme/billing</small></div></td>
-          <td><span class="pill pill--draft pill--dot">Pending · drafting…</span></td>
+          <td><span class="pill pill--warn pill--dot">Empty</span></td>
           <td class="pin-cell pin-cell--zero">—</td>
           <td class="time">just now</td>
           <td><span class="row-action muted">—</span></td>
@@ -319,10 +317,10 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
           <td class="time">2 h ago</td>
           <td><span class="row-action">Open →</span></td>
         </tr>
-        <tr data-status="reviewed" data-target="02-canvas.html">
+        <tr data-status="drafted" data-target="02-canvas.html">
           <td class="num">SC-007</td>
           <td><div class="name">Account · password<small>wires.behemoth.local/acme/account/password</small></div></td>
-          <td><span class="pill pill--ok pill--dot">Reviewed</span></td>
+          <td><span class="pill pill--ok pill--dot">Drafted</span></td>
           <td class="pin-cell pin-cell--zero">all done</td>
           <td class="time">yesterday</td>
           <td><span class="row-action">Open →</span></td>
@@ -346,7 +344,7 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
         <tr data-status="drafted" data-target="02-canvas.html">
           <td class="num">SC-010</td>
           <td><div class="name">Empty state · no projects<small>wires.behemoth.local/acme/empty</small></div></td>
-          <td><span class="pill pill--warn pill--dot">Draft · re-run failed</span></td>
+          <td><span class="pill pill--warn pill--dot">Empty</span></td>
           <td class="pin-cell pin-cell--zero">—</td>
           <td class="time">3 d ago</td>
           <td><span class="row-action">Retry →</span></td>
@@ -369,11 +367,11 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
 <div class="modal-wrap" id="capture-modal">
   <div class="modal">
     <div class="modal__head">
-      <span class="modal__kicker">FR-1 · Capture in progress</span>
+      <span class="modal__kicker">Capture in progress</span>
       <h3 class="modal__title">Capturing <span id="capture-count">3</span> wireframes…</h3>
     </div>
     <div class="modal__body">
-      <p>Each URL is fetched, screenshotted, and stored as a Snapshot. AI drafts will run asynchronously — Screens appear in the list immediately as <b>pending</b>.</p>
+      <p>Each URL is fetched, screenshotted, and stored as a Snapshot. Open each Screen to <b>write the Spec manually</b> and start QA via Pin / Box annotations.</p>
       <div class="modal__progress"><div class="modal__progress-bar" id="capture-bar"></div></div>
       <ul class="modal__list" id="capture-list"></ul>
     </div>
@@ -482,52 +480,35 @@ https://wires.behemoth.local/acme/orders/refund</textarea>
   $('#capture-cancel').addEventListener('click', ()=>{
     const urls = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
     modal.classList.remove('on');
-    appendNewScreens(urls, true);
+    appendNewScreens(urls);
     toast(`Capture running in background. <b>${urls.length} new Screens</b> added.`, 4000);
   });
 
   $('#capture-done').addEventListener('click', ()=>{
     const urls = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
     modal.classList.remove('on');
-    appendNewScreens(urls, true);
-    toast(`<b>${urls.length} new Screens</b> added. AI drafts running.`);
-    ta.value = '';
-    updateCount();
-  });
-
-  /* Capture only — no AI generate (FR-1 only) */
-  $('#capture-only-btn').addEventListener('click', ()=>{
-    const urls = updateCount();
-    if(urls.length === 0){ toast('No URLs to capture. Paste at least one URL.'); return; }
-    if(urls.length > 20){ toast('Max 20 URLs per submission.'); return; }
-    appendNewScreens(urls, false);
-    toast(`<b>${urls.length} new Screens</b> added (no AI). Author SRS manually or run AI later from the canvas.`, 4000);
+    appendNewScreens(urls);
+    toast(`<b>${urls.length} new Screens</b> added. Open each to write the Spec.`);
     ta.value = '';
     updateCount();
   });
 
   let nextNum = 11;
-  function appendNewScreens(urls, withAI){
+  function appendNewScreens(urls){
     urls.forEach(url=>{
       const num = 'SC-' + String(nextNum++).padStart(3,'0');
       const name = deriveName(url);
       const tr = document.createElement('tr');
       tr.className = 'new-row';
-      tr.dataset.status = withAI ? 'pending' : 'drafted';
-      tr.dataset.target = withAI ? '02-canvas.html' : '02-canvas.html#srs';
+      tr.dataset.status = 'empty';
+      tr.dataset.target = '02-canvas.html#spec';
       tr.dataset.num = num;
-      const aiPill = withAI
-        ? '<span class="pill pill--draft pill--dot">Pending · drafting…</span>'
-        : '<span class="pill pill--warn pill--dot">Empty · no AI</span>';
-      const action = withAI
-        ? '<span class="row-action muted">—</span>'
-        : '<span class="row-action">Author →</span>';
       tr.innerHTML = `<td class="num">${num}</td>
         <td><div class="name">${name}<small>${url}</small></div></td>
-        <td>${aiPill}</td>
+        <td><span class="pill pill--warn pill--dot">Empty</span></td>
         <td class="pin-cell pin-cell--zero">—</td>
         <td class="time">just now</td>
-        <td>${action}</td>`;
+        <td><span class="row-action">Author →</span></td>`;
       tbody.insertBefore(tr, tbody.firstChild);
     });
     const total = document.querySelectorAll('#screens-tbody tr').length;
